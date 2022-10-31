@@ -1,0 +1,12 @@
+﻿{
+  "@id": "dtmi:contosocom:DigitalTwins:Thermostat;1",
+  "@type": "Interface",
+  "@context": "dtmi:dtdl:context;2",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "Temperature",
+      "schema": "double"
+    }
+  ]
+}

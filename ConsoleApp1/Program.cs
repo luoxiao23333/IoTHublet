@@ -7,6 +7,8 @@ using Microsoft.Rest;
 using Message = Microsoft.Azure.Devices.Client.Message;
 using TransportType = Microsoft.Azure.Devices.Client.TransportType;
 
+using Microsoft.Extensions.Logging;
+
 namespace IoTHublet
 {
     class Program
@@ -15,12 +17,13 @@ namespace IoTHublet
         {
             new Program();
         }
-        
+
+        private readonly ILogger logger = LoggerFactory.GetLogger<Program>();
+
         private Program()
         {
             try
             {
-
                 string connctionStr = "HostName=IoTHubForPCL.azure-devices.net;DeviceId=233;SharedAccessKey=jDhmMzal2ZZuZ3pkhWgKqAij1+0DhfMe8L8ltb84iyM=";
 
                 DeviceClient deviceClient = DeviceClient.
@@ -38,16 +41,13 @@ namespace IoTHublet
                 while(true)
                 {
                     float? t = sensor.GetTemperature();
-                    Console.WriteLine("Temp is {0}", t?? -2000);
+                    logger.LogInformation($"Temperature is {t??null}");
                     if(t != null)
                     {
-
-
                         Encoding encoding = Encoding.UTF8;
                         string text = "{\"temperature\": " + t + " }";
                         byte[] toSend = encoding.GetBytes(text);
-
-                        Console.WriteLine(text);
+                        logger.LogInformation(text);
 
                         deviceClient.SendEventAsync(new Message(toSend));
                     }
@@ -61,11 +61,11 @@ namespace IoTHublet
                 deviceClient.CloseAsync();
             }catch(FileNotFoundException e)
             {
-                Console.WriteLine("File not found {0}", e.Message);
+                logger.LogError($"File not found {e.Message}");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                logger.LogError(e.Message);
             }
         }
     }
