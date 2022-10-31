@@ -13,12 +13,31 @@ namespace IoTHublet
 {
     class Program
     {
+        private async static Task receiveMessage()
+        {
+            ILogger logger = LoggerFactory.GetLogger("C2D Message");
+            logger.LogInformation("Start listening cloud to device messages from service");
+            DeviceClient deviceClient = DeviceClient.CreateFromConnectionString("HostName=IoTHubForPCL.azure-devices.net;DeviceId=233;SharedAccessKey=jDhmMzal2ZZuZ3pkhWgKqAij1+0DhfMe8L8ltb84iyM=");
+
+            while (true)
+            {
+                Message receivedMessage = await deviceClient.ReceiveAsync();
+                if (receivedMessage == null) continue;
+
+                logger.LogInformation("Received message: {0}",
+                Encoding.ASCII.GetString(receivedMessage.GetBytes()));
+
+                await deviceClient.CompleteAsync(receivedMessage);
+            }
+        }
         static void Main(string[] args)
         {
+            receiveMessage();
             new Program();
         }
 
         private readonly ILogger logger = LoggerFactory.GetLogger<Program>();
+
 
         private Program()
         {
@@ -34,18 +53,17 @@ namespace IoTHublet
                     throw new Exception("Configuraiton init failed!");
                 }
                 Sensor.DL11MC_TemperatureSensor sensor = 
-                    new Sensor.DL11MC_TemperatureSensor
-                    (Configuration.Instance.DeviceName);
+                    new Sensor.DL11MC_TemperatureSensor(Configuration.Instance.DeviceName);
 
                 sensor.Open();
                 while(true)
                 {
                     float? t = sensor.GetTemperature();
-                    logger.LogInformation($"Temperature is {t??null}");
+                    logger.LogInformation($"Temperature is {(t == null ? "Temperature Invalid!" : t)}");
                     if(t != null)
                     {
                         Encoding encoding = Encoding.UTF8;
-                        string text = "{\"temperature\": " + t + " }";
+                        string text = $"{{\"temperature\": {t}}}";
                         byte[] toSend = encoding.GetBytes(text);
                         logger.LogInformation(text);
 

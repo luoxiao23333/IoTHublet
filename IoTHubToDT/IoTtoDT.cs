@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using Microsoft.Azure.Devices;
+using Microsoft.Rest;
 
 namespace IoTHubToDT
 {
@@ -28,7 +30,6 @@ namespace IoTHubToDT
 
             try
             {
-            
                 // Authenticate with Digital Twins
                 var cred = new DefaultAzureCredential();
                 var client = new DigitalTwinsClient(new Uri(adtInstanceUrl), cred);
@@ -50,6 +51,13 @@ namespace IoTHubToDT
                     updateTwinData.AppendReplace("/Temperature", temperature);
                     await client.UpdateDigitalTwinAsync(deviceId, updateTwinData);
                     // </Update_twin_with_device_temperature>
+
+                    ServiceClient serviceClient = ServiceClient.
+                        CreateFromConnectionString("HostName=IoTHubForPCL.azure-devices.net;SharedAccessKeyName=service;SharedAccessKey=ri054JKq+nvJ3CW2AZ9cyVWY6xzsgmOD68kxf1/CBFY=", TransportType.Amqp);
+                    var commandMessage = new Message(Encoding.ASCII.GetBytes($"\"receiveTemperature\": {temperature}"));
+                    await serviceClient.SendAsync(deviceId, commandMessage);
+                    commandMessage.Dispose();
+                    await serviceClient.CloseAsync();
                 }
             }
             catch (Exception ex)
