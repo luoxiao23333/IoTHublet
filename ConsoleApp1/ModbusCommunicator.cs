@@ -1,7 +1,10 @@
 ﻿using System.IO.Ports;
 using System;
+using IoTHublet;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Logging;
 
-namespace SerialComm
+namespace IoTHublet.SerialComm
 {
 
     public static class CRC
@@ -39,6 +42,8 @@ namespace SerialComm
 
     public static class ModbusCommunication
     {
+        private static readonly ILogger logger = LoggerFactory.GetLogger(nameof(ModbusCommunication));
+
         //@brief put command via Modbus protocol to the hardware, and retrieve data
         //@temparam inputLength the byte length of command
         //@tamparam outputLength the byte length of retrieve data
@@ -56,12 +61,12 @@ namespace SerialComm
                 
                 if (CRC.Verify(outputs) == false)
                 {
-                    Console.Write("Output Code is: ");
+                    string logText = "Output Code is: ";
                     for (int i = 0; i < outputs.Length; ++i)
                     {
-                        Console.Write("{0} ", outputs[i]);
+                        logText += $"{outputs[i]} ";
                     }
-                    Console.WriteLine();
+                    logger.LogInformation(logText);
                     throw new Exception("CRC Check failed!");
                 }
 
@@ -70,7 +75,7 @@ namespace SerialComm
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                logger.LogError(e.Message);
                 return null;
             }
         }

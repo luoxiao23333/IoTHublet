@@ -1,7 +1,11 @@
 ﻿using System.IO.Ports;
 using System;
+using IoTHublet;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Logging;
+using IoTHublet.SerialComm;
 
-namespace Sensor
+namespace IoTHublet.Sensor
 {
     public class DL11MC_TemperatureSensor
     {
@@ -10,11 +14,13 @@ namespace Sensor
         private const int outputLength = 7;
         private SerialPort port;
 
+        private static readonly ILogger logger = LoggerFactory.GetLogger<DL11MC_TemperatureSensor>();
+
         public DL11MC_TemperatureSensor(string? deviceName)
         {
             if(deviceName == null)
             {
-                Console.WriteLine("Device name is null!");
+                logger.LogError("Device name is Null");
                 throw new Exception("Device name is null!");
             }
             else
@@ -44,7 +50,7 @@ namespace Sensor
                 SerialComm.ModbusCommunication.ModbusQuery(read1TempratureCommand, ref port, outputLength);
             if(outputs == null)
             {
-                Console.WriteLine("Read device {0} failed!", port.PortName);
+                logger.LogError($"Read device {port.PortName} failed!");
                 return null;
             }
             return computeTemperature(outputs[3], outputs[4]);
@@ -54,7 +60,7 @@ namespace Sensor
         {
             if (highByte == 0x7F && lowByte == 0xFF)
             {
-                Console.WriteLine("Temprature Sensor may broke or non-exist!");
+                logger.LogError("Temprature Sensor may broke or non-exist!");
                 return null;
             }
 

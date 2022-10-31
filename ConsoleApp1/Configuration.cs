@@ -3,6 +3,7 @@ using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
 using System.Net;
 using System.Linq.Expressions;
+using Microsoft.Extensions.Logging;
 
 namespace IoTHublet
 {
@@ -11,6 +12,8 @@ namespace IoTHublet
     public static class Configuration
     {
         private static string configFileName = "IoTHublet.conf";
+
+        private static readonly ILogger logger = LoggerFactory.GetLogger(nameof(Configuration));
 
         public class Info
         {
@@ -34,17 +37,17 @@ namespace IoTHublet
 
                 if (Instance == null)
                 {
-                    Console.WriteLine("Read config file {0} failed", configFileName);
+                    logger.LogCritical("Read config file {0} failed", configFileName);
                     throw new Exception("Config file read failed!");
                 }
             }
             catch(FileNotFoundException e)
             {
-                Console.WriteLine("Config File Not Found! Not Fond in {0}", e);
+                logger.LogCritical("Config File Not Found! Not Fond in {0}", e);
             }
             catch(Exception e)
             {
-                Console.WriteLine(e);
+                logger.LogCritical(e.Message);
             }
 
             
