@@ -29,10 +29,17 @@ namespace IoTHublet
             {
                 logger.LogCritical("sensor {0} open failed!", sensor.GetDeviceName());
             }
+            logger.LogInformation("sensor {0} open successfully!", sensor.GetDeviceName());
 
             //Warning: The first two samples always invalid, so discard them. Not know why
             sensor.GetTemperature();
             sensor.GetTemperature();
+
+            Console.WriteLine(@"
+IoTHublet Interaction Start!
+Input 'S' to sample and send temperature to cloud
+Input 'R' to try to receive a message from cloud in 10 seconds
+Input 'Q' to exit!");
 
             while (true)
             {

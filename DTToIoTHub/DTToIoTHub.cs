@@ -8,7 +8,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Devices;
 using Microsoft.Azure.Devices.Client;
-using Message = Microsoft.Azure.Devices.Client.Message;
+using Message = Microsoft.Azure.Devices.Message;
 using DotNetty.Common.Utilities;
 
 namespace DTToIoTHub
@@ -27,17 +27,16 @@ namespace DTToIoTHub
                     // Replace these two lines with your processing logic.
                     log.LogInformation($"C# Event Hub trigger function processed a message: {eventData.EventBody.ToString()}");
 
-                    DeviceClient deviceClient =
-                        DeviceClient.CreateFromConnectionString(
+                    ServiceClient serviceClient =
+                        ServiceClient.CreateFromConnectionString(
                             "HostName=IoTHubForPCL.azure-devices.net;SharedAccessKeyName=service;SharedAccessKey=ri054JKq+nvJ3CW2AZ9cyVWY6xzsgmOD68kxf1/CBFY=");
 
                     byte[] byteMessage = Encoding.ASCII.GetBytes($"Receive update from DT: {eventData.EventBody.ToString()}");
                     Message message = new Message(byteMessage);
 
-                    await deviceClient.SendEventAsync(message);
-                    await deviceClient.CompleteAsync(message);
+                    await serviceClient.SendAsync("233", message);
                     message.Dispose();
-                    await deviceClient.CloseAsync();
+                    await serviceClient.CloseAsync();
 
                     await Task.Yield();
                 }
