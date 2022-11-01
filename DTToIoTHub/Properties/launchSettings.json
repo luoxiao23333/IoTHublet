@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "DTToIoTHub": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7144",
+      "launchBrowser": false
+    }
+  }
+}

@@ -56,6 +56,11 @@ namespace IoTHublet.Sensor
             return computeTemperature(outputs[3], outputs[4]);
         }
 
+        public string GetDeviceName()
+        {
+            return port.PortName;
+        }
+
         private float? computeTemperature(byte highByte, byte lowByte)
         {
             if (highByte == 0x7F && lowByte == 0xFF)

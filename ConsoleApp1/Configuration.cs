@@ -4,6 +4,7 @@ using YamlDotNet.Serialization;
 using System.Net;
 using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
+using System.Runtime.CompilerServices;
 
 namespace IoTHublet
 {
@@ -17,11 +18,14 @@ namespace IoTHublet
 
         public class Info
         {
-            public string? DeviceName;
+            public string DeviceName;
+            public string IotHubConnectionString;
         }
 
-        public static Info? Instance;
+        public static Info Instance;
 
+        // Instance can never be null, since null will invike LogCritical, that quit the process
+#pragma warning disable CS8618
         static Configuration()
         {
             try
@@ -49,9 +53,6 @@ namespace IoTHublet
             {
                 logger.LogCritical(e.Message);
             }
-
-            
-
         }
     }
 }
