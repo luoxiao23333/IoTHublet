@@ -18,7 +18,7 @@ namespace IoTHublet.Sensor
 
         public DL11MC_TemperatureSensor(string? deviceName)
         {
-            if(deviceName == null)
+            if (deviceName == null)
             {
                 logger.LogError("Device name is Null");
                 throw new Exception("Device name is null!");
