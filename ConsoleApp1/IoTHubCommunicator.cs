@@ -16,6 +16,8 @@ namespace IoTHublet
 
         private static readonly TimeSpan defaultReciveTimeout = TimeSpan.FromSeconds(10);
 
+        public delegate Task ReceiveMessageHandler(string message); 
+
         IoTHubCommunicator(DeviceClient initClient)
         {
             deviceClient = initClient;
@@ -29,39 +31,53 @@ namespace IoTHublet
             return communicator;
         }
 
-        public string? ReceiveMessage()
+        public async Task ListenReceiverAsync(ReceiveMessageHandler callback)
         {
-            receiverLogger.LogInformation("Start receive session");
-            Message receivedMessage = deviceClient.ReceiveAsync(defaultReciveTimeout).Result;
-            if (receivedMessage == null)
+            await Task.Run(() =>
             {
-                receiverLogger.LogInformation("Not receive message after waiting for {0}",
-                    defaultReciveTimeout.ToString());
-                return null;
-            }
-            string receivingString = Encoding.ASCII.GetString(receivedMessage.GetBytes());
-            receiverLogger.LogInformation("Received message: {0}", receivingString);
-            deviceClient.CompleteAsync(receivedMessage).Wait();
-            receiverLogger.LogInformation("receive Done!");
-            return receivingString;
+                receiverLogger.LogInformation("Start receive listening session");
+                while (true)
+                {
+                    Message receivedMessage = deviceClient.ReceiveAsync().Result;
+                    if (receivedMessage == null)
+                    {
+                        receiverLogger.LogInformation("Not receive message!");
+                        continue;
+                    }
+                    string receivingString = Encoding.ASCII.GetString(receivedMessage.GetBytes());
+                    receiverLogger.LogInformation("Received message: {0}", receivingString);
+                    deviceClient.CompleteAsync(receivedMessage).Wait();
+                    callback(receivingString).Wait();
+                    receiverLogger.LogInformation("receive Done!");
+                }
+            });
+            return;
         }
 
-        public bool SendMessage(string message)
+        public async Task<bool> SendMessageAsync(string message)
         {
-            try
+            return await Task.Run(bool () =>
             {
-                Encoding encoding = Encoding.UTF8;
-                byte[] messageByte = encoding.GetBytes(message);
-                senderlogger.LogInformation($"Sending {message}");
-                deviceClient.SendEventAsync(new Message(messageByte)).Wait();
-                senderlogger.LogInformation("Send Done!");
-                return true;
-            }
-            catch (Exception e)
-            {
-                senderlogger.LogError(e.Message);
-                return false;
-            }
+                try
+                {
+                    Encoding encoding = Encoding.UTF8;
+                    byte[] messageByte = encoding.GetBytes(message);
+                    senderlogger.LogInformation($"Sending {message}");
+                    deviceClient.SendEventAsync(new Message(messageByte)).Wait();
+                    senderlogger.LogInformation($"Send {message} Done!");
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    senderlogger.LogError(e.Message);
+                    return false;
+                }
+            });
+        }
+
+        public async Task CloseAsync()
+        {
+            await deviceClient.CloseAsync();
         }
     }
 }

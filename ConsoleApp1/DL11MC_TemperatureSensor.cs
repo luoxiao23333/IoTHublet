@@ -40,9 +40,9 @@ namespace IoTHublet.Sensor
         {
             port.Close();
         }
-
+        
         //@Warning This method will wait sensor until it receive temperature info
-        //So you should create a thread to run it
+        //So you should create a thread to run it to avoid blocking main thread
         public float? GetTemperature()
         {
 
@@ -78,6 +78,6 @@ namespace IoTHublet.Sensor
 
             return temperature;
         }
-
+   
     }
 }
