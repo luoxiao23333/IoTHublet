@@ -33,10 +33,6 @@ namespace IoTHublet
                 }
                 logger.LogInformation("sensor {0} open successfully!", sensor.GetDeviceName());
 
-                //Warning: The first two samples always invalid, so discard them. Not know why
-                sensor.GetTemperature();
-                sensor.GetTemperature();
-
                 Console.WriteLine(@"
 IoTHublet Interaction Start!
 Input 'S' to sample and send temperature to cloud
