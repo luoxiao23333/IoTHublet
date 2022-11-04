@@ -23,8 +23,13 @@ namespace IoTHublet
             deviceClient = initClient;
         }
 
-        public static IoTHubCommunicator CreateFromConnectionString(string connectStr)
+        public static IoTHubCommunicator CreateFromConnectionString(string? connectStr)
         {
+            if(connectStr == null)
+            {
+                throw new Exception("Connection to Cloud build error!");
+            }
+
             DeviceClient client = DeviceClient.CreateFromConnectionString(connectStr, TransportType.Mqtt);
             IoTHubCommunicator communicator = new IoTHubCommunicator(client);
 

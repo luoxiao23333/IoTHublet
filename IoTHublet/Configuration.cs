@@ -5,6 +5,7 @@ using System.Net;
 using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace IoTHublet
 {
@@ -18,14 +19,14 @@ namespace IoTHublet
 
         public class Info
         {
-            public string DeviceName;
-            public string IotHubConnectionString;
+            public string? DeviceName;
+            public string? IotHubConnectionString;
         }
 
-        public static Info Instance;
+        public static Info Instance = new Info();
 
         // Instance can never be null, since null will invike LogCritical, that quit the process
-#pragma warning disable CS8618
+
         static Configuration()
         {
             try
@@ -48,11 +49,20 @@ namespace IoTHublet
             catch(FileNotFoundException e)
             {
                 logger.LogCritical("Config File Not Found! Not Fond in {0}", e);
+                Process.GetCurrentProcess().Kill();
+            }
+            catch(YamlDotNet.Core.YamlException e)
+            {
+                logger.LogCritical($"{e.Message}!\n Maybe conf file {configFileName} not match with" +
+                    $" class \"info\"!");
+                Process.GetCurrentProcess().Kill();
             }
             catch(Exception e)
             {
                 logger.LogCritical(e.Message);
+                Process.GetCurrentProcess().Kill();
             }
         }
     }
 }
+#pragma warning disable CS8618
