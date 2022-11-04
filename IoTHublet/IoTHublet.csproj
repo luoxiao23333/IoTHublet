@@ -18,4 +18,8 @@
     <PackageReference Include="YamlDotNet" Version="12.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DTModel\DTModel.csproj" />
+  </ItemGroup>
+
 </Project>

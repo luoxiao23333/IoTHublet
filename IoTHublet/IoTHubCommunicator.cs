@@ -46,9 +46,9 @@ namespace IoTHublet
                     }
                     string receivingString = Encoding.ASCII.GetString(receivedMessage.GetBytes());
                     receiverLogger.LogInformation("Received message: {0}", receivingString);
-                    deviceClient.CompleteAsync(receivedMessage).Wait();
                     callback(receivingString).Wait();
-                    receiverLogger.LogInformation("receive Done!");
+                    deviceClient.CompleteAsync(receivedMessage).Wait();
+                    receiverLogger.LogInformation("Message Process Done!");
                 }
             });
             return;

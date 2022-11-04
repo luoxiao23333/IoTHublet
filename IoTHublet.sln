@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTHublet", "ConsoleApp1\IoTHublet.csproj", "{E9DC1E46-E4B9-41A3-93DB-E3574351D83F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTHubToDT", "Azure Function\IoTHubToDT\IoTHubToDT.csproj", "{B876B4DD-6B8C-41C2-A525-11AE2D13FA63}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTToIoTHub", "Azure Function\DTToIoTHub\DTToIoTHub.csproj", "{ED888610-ED01-4867-926B-99834BE7959C}"
@@ -13,16 +11,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTModel", "DTModel\DTModel.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure Function", "Azure Function", "{F97E7D25-272C-447B-AD2B-86B1C452A974}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTHublet", "IoTHublet\IoTHublet.csproj", "{28B1BA2A-9F4B-4289-B6A5-99208A1C93CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E9DC1E46-E4B9-41A3-93DB-E3574351D83F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E9DC1E46-E4B9-41A3-93DB-E3574351D83F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E9DC1E46-E4B9-41A3-93DB-E3574351D83F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E9DC1E46-E4B9-41A3-93DB-E3574351D83F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B876B4DD-6B8C-41C2-A525-11AE2D13FA63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B876B4DD-6B8C-41C2-A525-11AE2D13FA63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B876B4DD-6B8C-41C2-A525-11AE2D13FA63}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -35,6 +31,10 @@ Global
 		{99155C32-E4D2-4E5D-AF0C-312D046414AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99155C32-E4D2-4E5D-AF0C-312D046414AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99155C32-E4D2-4E5D-AF0C-312D046414AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28B1BA2A-9F4B-4289-B6A5-99208A1C93CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28B1BA2A-9F4B-4289-B6A5-99208A1C93CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28B1BA2A-9F4B-4289-B6A5-99208A1C93CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28B1BA2A-9F4B-4289-B6A5-99208A1C93CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
