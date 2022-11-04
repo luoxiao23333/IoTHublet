@@ -26,12 +26,12 @@ namespace IoTHublet
         static void Main(string[] args)
         {
             try
-            {
+            {/*
                 if (sensor.Open() == false)
                 {
                     logger.LogCritical("sensor {0} open failed!", sensor.GetDeviceName());
                 }
-                logger.LogInformation("sensor {0} open successfully!", sensor.GetDeviceName());
+                logger.LogInformation("sensor {0} open successfully!", sensor.GetDeviceName());*/
 
                 //Warning: The first two samples always invalid, so discard them. Not know why
                 sensor.GetTemperature();
@@ -59,7 +59,8 @@ Input 'Q' to exit!");
                     }
                     else if (key == "S")
                     {
-                        float? temperature = sensor.GetTemperature();
+                        //float? temperature = sensor.GetTemperature();
+                        float? temperature = 10;
                         if (temperature == null)
                         {
                             continue;
